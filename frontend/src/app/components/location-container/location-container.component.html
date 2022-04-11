@@ -1,0 +1,12 @@
+<div>
+  <label for="my-location">
+    <input type="radio" name="selector-location-type" id="my-location" value="browser-location"
+           [ngModel]="locationType" (ngModelChange)="changeLocationType($event)"/>
+    Get my current location</label>
+  <label for="address-search">
+    <input type="radio" name="selector-location-type" id="address-search" value="address" [ngModel]="locationType"
+           (ngModelChange)="changeLocationType($event)"/>
+    Search an address</label>
+  <app-browser-location *ngIf=" isBrowserLocation()"></app-browser-location>
+  <app-address-container *ngIf="isAddressLocation()"></app-address-container>
+</div>

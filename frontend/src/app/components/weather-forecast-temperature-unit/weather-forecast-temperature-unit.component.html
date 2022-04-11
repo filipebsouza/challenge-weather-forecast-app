@@ -1,0 +1,10 @@
+<div>
+  <label for="celsius">
+    <input type="radio" name="selector-temperature-unit" id="celsius" value="C" [ngModel]="temperatureUnit"
+           (ngModelChange)="changeTemperatureUnit($event)" checked/>
+    Celsius</label>
+  <label for="fahrenheit">
+    <input type="radio" name="selector-temperature-unit" id="fahrenheit" value="F" [ngModel]="temperatureUnit"
+           (ngModelChange)="changeTemperatureUnit($event)"/>
+    Fahrenheit</label>
+</div>

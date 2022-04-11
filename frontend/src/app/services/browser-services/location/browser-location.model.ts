@@ -4,6 +4,7 @@ import {LocationModel} from "../../../models/location.model";
 export class BrowserLocationModel implements LocationModel{
   latitude?: number;
   longitude?: number;
+  completeAddress?: string;
   state: BrowserLocationState;
 
   constructor(latitude?: number, longitude?: number, state = BrowserLocationState.Success) {
@@ -18,6 +19,14 @@ export class BrowserLocationModel implements LocationModel{
 
   getLongitude(): number | undefined {
     return this.longitude;
+  }
+
+  getCompleteAddress(): string | undefined {
+    return this.completeAddress;
+  }
+
+  setCompleteAddress(completeAddress: string): void {
+    this.completeAddress = completeAddress;
   }
 
   hasSuccess(): boolean {

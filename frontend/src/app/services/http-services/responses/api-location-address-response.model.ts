@@ -16,4 +16,8 @@ export class ApiLocationAddressResponseModel implements LocationModel {
   hasSuccess(): boolean {
     return !!this.latitude && !!this.longitude;
   }
+
+  getCompleteAddress(): string | undefined {
+    return this.completeAddress;
+  }
 }

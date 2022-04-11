@@ -1,9 +1,9 @@
-<div *ngIf="!address; else elseBlock">
+<div *ngIf="!addresses; else elseBlock">
   <p>No address found!</p>
 </div>
 <ng-template #elseBlock>
   <ul>
-    <li *ngFor="let address of address">{{ address.completeAddress }}
+    <li *ngFor="let address of addresses">{{ address.completeAddress }}
       <button (click)="select(address)">Select</button>
     </li>
   </ul>
