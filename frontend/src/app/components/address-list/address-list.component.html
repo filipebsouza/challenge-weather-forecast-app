@@ -1,0 +1,10 @@
+<div *ngIf="!address; else elseBlock">
+  <p>No address found!</p>
+</div>
+<ng-template #elseBlock>
+  <ul>
+    <li *ngFor="let address of address">{{ address.completeAddress }}
+      <button (click)="select(address)">Select</button>
+    </li>
+  </ul>
+</ng-template>
