@@ -1,1 +1,9 @@
-<p>weather-forecast-list works!</p>
+<div *ngIf="!weatherForecast || !weatherForecast.days; else elseBlock">
+  <p>No weather forecast found!</p>
+</div>
+<ng-template #elseBlock>
+  <ul>
+    <li *ngFor="let day of weatherForecast!.days">{{ day.temperature }}
+    </li>
+  </ul>
+</ng-template>

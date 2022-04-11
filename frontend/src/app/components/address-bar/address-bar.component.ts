@@ -28,7 +28,8 @@ export class AddressBarComponent implements OnInit {
 
   search() {
     if (this.address) {
-      this.apiService.get<ApiLocationResponseModel>(`${this.locationApiHost}?address=${this.address}`)
+      //this.apiService.get<ApiLocationResponseModel>(`${this.locationApiHost}?address=${this.address}`)
+      this.apiService.getTeste2(`${this.locationApiHost}?address=${this.address}`)
         .subscribe(location => {
           this.response = location;
           this.addressPublisherService.create(this.response);
