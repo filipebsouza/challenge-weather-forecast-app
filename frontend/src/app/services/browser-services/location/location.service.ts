@@ -19,6 +19,7 @@ export class LocationService {
           observable.complete();
         },
         error => {
+          console.log(error)
           let locationStateError = BrowserLocationState.UnexpectedError;
           if (error.PERMISSION_DENIED) {
             locationStateError = BrowserLocationState.PermissionDenied;

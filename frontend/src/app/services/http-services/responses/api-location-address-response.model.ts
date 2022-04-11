@@ -13,7 +13,7 @@ export class ApiLocationAddressResponseModel implements LocationModel {
     return this.longitude;
   }
 
-  hasSuccess(): boolean {
+  isValid(): boolean {
     return !!this.latitude && !!this.longitude;
   }
 

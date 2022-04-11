@@ -3,7 +3,7 @@ export interface LocationModel {
   longitude?: number;
   completeAddress?: string;
 
-  hasSuccess(): boolean;
+  isValid(): boolean;
 
   getLatitude(): number | undefined;
 

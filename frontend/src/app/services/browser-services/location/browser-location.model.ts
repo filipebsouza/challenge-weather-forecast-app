@@ -29,7 +29,7 @@ export class BrowserLocationModel implements LocationModel{
     this.completeAddress = completeAddress;
   }
 
-  hasSuccess(): boolean {
+  isValid(): boolean {
     return this.state == BrowserLocationState.Success;
   }
 }

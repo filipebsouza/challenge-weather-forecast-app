@@ -26,7 +26,7 @@ export class BrowserLocationComponent implements OnInit {
   }
 
   getLocation() {
-    if (!this.location) {
+    if (!this.location || !this.location.isValid()) {
       this.locationService.getLocation()
         .subscribe(location => {
           this.location = location;
@@ -41,12 +41,16 @@ export class BrowserLocationComponent implements OnInit {
   }
 
   getAddress() {
+    if (!this.location?.isValid()) {
+      console.log('Location invalid');
+    }
+
     this.apiService
       .getTeste(`${this.locationApiHost}/location/address?latitude=${this.location!.latitude}&longitude=${this.location!.longitude}`)
-      //.get<string>(`${this.locationApiHost}/location/address?latitude=${latitude}&longitude=${longitude}`)
+      //.get<string>(`${this.locationApiHost}/location/address?latitude=${this.location!.latitude}&longitude=${this.location!.longitude}`)
       .subscribe(address => {
-        console.log(address);
-        console.log(this.location);
+        //console.log(address);
+        //console.log(this.location);
         this.location!.setCompleteAddress(address);
         this.locationPublisherService.create(this.location!);
       });
