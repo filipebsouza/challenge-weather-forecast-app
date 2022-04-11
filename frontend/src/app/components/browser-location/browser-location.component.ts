@@ -41,11 +41,12 @@ export class BrowserLocationComponent implements OnInit {
   }
 
   getAddress() {
-    const {latitude, longitude} = this.location!;
     this.apiService
-      .getTeste(`${this.locationApiHost}/location/address?latitude=${latitude}&longitude=${longitude}`)
+      .getTeste(`${this.locationApiHost}/location/address?latitude=${this.location!.latitude}&longitude=${this.location!.longitude}`)
       //.get<string>(`${this.locationApiHost}/location/address?latitude=${latitude}&longitude=${longitude}`)
       .subscribe(address => {
+        console.log(address);
+        console.log(this.location);
         this.location!.setCompleteAddress(address);
         this.locationPublisherService.create(this.location!);
       });

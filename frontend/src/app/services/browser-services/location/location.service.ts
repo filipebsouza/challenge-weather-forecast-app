@@ -12,7 +12,10 @@ export class LocationService {
     return new Observable<BrowserLocationModel>(observable => {
       navigator.geolocation?.getCurrentPosition(
         success => {
-          observable.next(new BrowserLocationModel(success.coords.latitude, success.coords.longitude));
+          console.log(success.coords);
+          let location = new BrowserLocationModel(success.coords.latitude, success.coords.longitude);
+          console.log(location);
+          observable.next(location);
           observable.complete();
         },
         error => {

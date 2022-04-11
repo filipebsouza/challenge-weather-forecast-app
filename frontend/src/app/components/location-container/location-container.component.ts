@@ -6,7 +6,7 @@ import {Component} from '@angular/core';
   styleUrls: ['./location-container.component.css']
 })
 export class LocationContainerComponent {
-  locationType: string = "";
+  locationType: string = 'address';
 
   isBrowserLocation(): boolean {
     return this.locationType == 'browser-location';
@@ -17,6 +17,6 @@ export class LocationContainerComponent {
   }
 
   changeLocationType($event: any) {
-    this.locationType = $event.target.value;
+    this.locationType = $event;
   }
 }
