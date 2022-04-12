@@ -4,5 +4,5 @@ namespace Weather.Api.Infrastructure;
 
 public interface ILocationService
 {
-    Task<LocationResponse?> Get(string address);
+    Task<LocationApiResponse?> Get(string address);
 }

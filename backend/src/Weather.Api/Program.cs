@@ -1,6 +1,8 @@
 using Serilog;
 using Weather.Api.Configuration;
 using Weather.Api.Features;
+using Weather.Api.Infrastructure;
+using Weather.Api.Infrastructure.Services;
 
 Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
 Log.Information("Starting up");
@@ -16,6 +18,8 @@ try
 
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+
+    builder.Services.AddTransient<ILocationService, LocationService>();
 
     var app = builder.Build();
 
