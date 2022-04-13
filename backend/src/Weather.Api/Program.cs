@@ -1,10 +1,7 @@
 using Core.Api.Resources.Extensions;
+using Core.Api.Resources.Http.Middlewares;
 using Serilog;
 using Weather.Api.Configuration;
-using Weather.Api.Modules.Forecast.Endpoints;
-using Weather.Api.Modules.Forecast.Ports;
-using Weather.Api.Modules.Location.Adapters;
-using Weather.Api.Modules.Location.Endpoints;
 
 Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
 Log.Information("Starting up");
@@ -29,6 +26,7 @@ try
         app.UseSwaggerUI();
     }
 
+    app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
     app.UseHttpsRedirection();
 
     app.Run();

@@ -1,4 +1,5 @@
 using Core.Api.Resources.Extensions;
+using Core.Api.Resources.Http.Middlewares;
 using Location.Api.Configuration;
 using Serilog;
 
@@ -25,6 +26,7 @@ try
         app.UseSwaggerUI();
     }
 
+    app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
     app.UseHttpsRedirection();
 
     app.Run();

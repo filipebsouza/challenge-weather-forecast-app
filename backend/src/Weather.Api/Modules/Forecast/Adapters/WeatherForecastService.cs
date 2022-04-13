@@ -1,7 +1,7 @@
 using Core.Api.Resources.Extensions;
 using Weather.Api.Configuration;
+using Weather.Api.Modules.Forecast.Endpoints.Responses;
 using Weather.Api.Modules.Forecast.Ports;
-using Weather.Api.Modules.Location.Endpoints.Responses;
 
 namespace Weather.Api.Modules.Location.Adapters;
 
@@ -18,11 +18,11 @@ public class WeatherForecastService : IWeatherForecastService
         _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("(filipe.dev, filipe.bsouza@gmail.com)");
     }
 
-    public async Task<GetWeatherForecastResponse?> Get(int latitude, int longitude, string temperatureUnit)
+    public async Task<GetWeatherForecastResponse?> Get(int latitude, int longitude, char temperatureUnit)
     {
         var response =
             await _httpClient.GetAsync(
-                $"{longitude},{latitude}/forecast?units={(temperatureUnit.ToUpper() == "C" ? "si" : "us")}");
+                $"{longitude},{latitude}/forecast?units={(temperatureUnit == 'C' ? "si" : "us")}");
         if (!response.IsSuccessStatusCode)
         {
             _logger.LogInformation("Weather forecast not found");

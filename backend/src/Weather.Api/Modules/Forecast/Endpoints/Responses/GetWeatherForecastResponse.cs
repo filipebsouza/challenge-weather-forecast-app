@@ -1,4 +1,4 @@
-namespace Weather.Api.Modules.Location.Endpoints.Responses;
+namespace Weather.Api.Modules.Forecast.Endpoints.Responses;
 
 public record GetWeatherForecastResponse(GetWeatherForecastDayResponse[] Days);
 
