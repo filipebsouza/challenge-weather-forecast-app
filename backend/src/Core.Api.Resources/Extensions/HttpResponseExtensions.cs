@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace Weather.Api.Extensions;
+namespace Core.Api.Resources.Extensions;
 
 public static class HttpResponseExtensions
 {

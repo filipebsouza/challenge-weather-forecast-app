@@ -1,9 +1,9 @@
-using Weather.Api.Configuration;
-using Weather.Api.Contracts.Response;
-using Weather.Api.Contracts.Response.LocationService;
-using Weather.Api.Extensions;
+using Core.Api.Resources.Extensions;
+using Location.Api.Configuration;
+using Location.Api.Modules.Location.Endpoints.Responses;
+using Location.Api.Modules.Location.Ports;
 
-namespace Weather.Api.Infrastructure.Services;
+namespace Location.Api.Modules.Location.Adapters;
 
 public class LocationService : ILocationService
 {
@@ -17,7 +17,7 @@ public class LocationService : ILocationService
         _httpClient.BaseAddress = new Uri(configuration[ConfigurationProperties.LocationService]);
     }
 
-    public async Task<LocationApiResponse?> Get(string address)
+    public async Task<GetAddressResponse?> Get(string address)
     {
         var response = await _httpClient.GetAsync($"onelineaddress?address={address}&benchmark=2020&format=json");
         if (!response.IsSuccessStatusCode)
@@ -29,10 +29,13 @@ public class LocationService : ILocationService
         var data = await response.ReadAsResponseDtoAsync<LocationServiceResponse>();
         if (data is null) return null;
 
-        var addresses = data.Result.AddressMatches.Select(address =>
-            new LocationApiAddressResponse(address.Coordinates.Latitude, address.Coordinates.Longitude,
-                address.MatchedAddress)).ToArray();
+        var addresses = data?.Result?.AddressMatches
+            ?.Where(address => address.Coordinates is not null && address.MatchedAddress is not null).Select(address =>
+                new GetAddressItemResponse(address!.Coordinates!.Latitude, address!.Coordinates!.Longitude,
+                    address.MatchedAddress!)).ToArray();
 
-        return new LocationApiResponse(addresses);
+        if (addresses is null) return null;
+
+        return new GetAddressResponse(addresses);
     }
 }

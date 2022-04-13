@@ -1,8 +1,8 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
-using Weather.Api.Infrastructure;
+using Weather.Api.Modules.Location.Ports;
 
-namespace Weather.Api.Features;
+namespace Weather.Api.Modules.Location.Endpoints;
 
 public static class GetAddress
 {
