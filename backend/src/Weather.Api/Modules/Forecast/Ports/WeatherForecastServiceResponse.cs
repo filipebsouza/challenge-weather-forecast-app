@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Weather.Api.Modules.Location.Ports;
+namespace Weather.Api.Modules.Forecast.Ports;
 
 public class Geometry
 {
@@ -46,7 +46,7 @@ public class Properties
     [JsonPropertyName("periods")] public List<Period>? Periods { get; set; }
 }
 
-public class WeatherServiceResponse
+public class WeatherForecastServiceResponse
 {
     [JsonPropertyName("@context")] public List<object>? Context { get; set; }
     [JsonPropertyName("type")] public string? Type { get; set; }

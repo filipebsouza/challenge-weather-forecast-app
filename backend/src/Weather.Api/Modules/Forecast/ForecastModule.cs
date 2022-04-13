@@ -1,15 +1,15 @@
 using Core.Api.Resources.Modules;
+using Weather.Api.Modules.Forecast.Ports;
 using Weather.Api.Modules.Location.Adapters;
 using Weather.Api.Modules.Location.Endpoints;
-using Weather.Api.Modules.Location.Ports;
 
-namespace Weather.Api.Modules.Location;
+namespace Weather.Api.Modules.Forecast;
 
-public class LocationModule : IModule
+public class ForecastModule : IModule
 {
     public IServiceCollection RegisterModule(IServiceCollection services)
     {
-        services.AddTransient<ILocationService, LocationService>();
+        services.AddTransient<IWeatherForecastService, WeatherForecastService>();
         return services;
     }
 
