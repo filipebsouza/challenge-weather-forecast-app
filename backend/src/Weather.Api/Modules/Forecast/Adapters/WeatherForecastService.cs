@@ -14,17 +14,20 @@ public class WeatherForecastService : IWeatherForecastService
     {
         _logger = logger;
         _httpClient = new HttpClient();
-        _httpClient.BaseAddress = new Uri(configuration[ConfigurationProperties.LocationService]);
+        _httpClient.BaseAddress = new Uri(configuration[ConfigurationProperties.WeatherService]);
+        _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("(filipe.dev, filipe.bsouza@gmail.com)");
     }
 
     public async Task<GetWeatherForecastResponse?> Get(int latitude, int longitude, string temperatureUnit)
     {
         var response =
             await _httpClient.GetAsync(
-                $"{longitude}{latitude}/forecast?units={(temperatureUnit.ToUpper() == "C" ? "si" : "us")}");
+                $"{longitude},{latitude}/forecast?units={(temperatureUnit.ToUpper() == "C" ? "si" : "us")}");
         if (!response.IsSuccessStatusCode)
         {
             _logger.LogInformation("Weather forecast not found");
+            var error = await response.Content.ReadAsStringAsync();
+            _logger.LogInformation($"Error: {error}");
             return null;
         }
 

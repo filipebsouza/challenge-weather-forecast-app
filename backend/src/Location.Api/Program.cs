@@ -13,7 +13,6 @@ try
     var builder = WebApplication.CreateBuilder(args);
 
     builder.Services.RegisterModules(typeof(Program));
-
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 
