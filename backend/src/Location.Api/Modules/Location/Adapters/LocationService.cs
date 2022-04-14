@@ -10,14 +10,13 @@ public class LocationService : ILocationService
     private readonly ILogger<LocationService> _logger;
     private readonly HttpClient _httpClient;
 
-    public LocationService(ILogger<LocationService> logger, IConfiguration configuration)
+    public LocationService(ILogger<LocationService> logger, IHttpClientFactory factory)
     {
         _logger = logger;
-        _httpClient = new HttpClient();
-        _httpClient.BaseAddress = new Uri(configuration[ConfigurationProperties.LocationService]);
+        _httpClient = factory.CreateClient(ConfigurationProperties.LocationServiceHttpClientName);
     }
 
-    public async Task<GetAddressResponse?> Get(string address)
+    public async Task<GetLocationResponse?> Get(string address)
     {
         var response = await _httpClient.GetAsync($"onelineaddress?address={address}&benchmark=2020&format=json");
         if (!response.IsSuccessStatusCode)
@@ -27,15 +26,30 @@ public class LocationService : ILocationService
         }
 
         var data = await response.ReadAsResponseDtoAsync<LocationServiceResponse>();
-        if (data is null) return null;
+        if (data is null || data.Result is null)
+        {
+            _logger.LogInformation($"Json parse error from {nameof(LocationService)}");
+            return null;
+        }
 
         var addresses = data?.Result?.AddressMatches
-            ?.Where(address => address.Coordinates is not null && address.MatchedAddress is not null).Select(address =>
-                new GetAddressItemResponse(address!.Coordinates!.Latitude, address!.Coordinates!.Longitude,
-                    address.MatchedAddress!)).ToArray();
+            ?.Where(a => a.Coordinates is not null && a.MatchedAddress is not null).Select(a =>
+                new GetLocationItemResponse
+                {
+                    Latitude = a!.Coordinates!.Latitude,
+                    Longitude = a!.Coordinates!.Longitude,
+                    CompleteAddress = a.MatchedAddress!
+                }).ToArray();
 
-        if (addresses is null) return null;
+        if (addresses is null)
+        {
+            _logger.LogInformation("Invalid addresses!");
+            return null;
+        }
 
-        return new GetAddressResponse(addresses);
+        return new GetLocationResponse
+        {
+            Addresses = addresses
+        };
     }
 }

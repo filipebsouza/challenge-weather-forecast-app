@@ -2,5 +2,6 @@ namespace Weather.Api.Configuration;
 
 public static class ConfigurationProperties
 {
-    public const string WeatherService = "Application:Integrations:WeatherService:Host";
+    public const string WeatherForecastServiceHttpClientName = "WeatherForecastServiceHttpClient";
+    public const string WeatherForecastServiceHost = "Application:Integrations:WeatherForecastService:Host";
 }

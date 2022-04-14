@@ -7,13 +7,8 @@ namespace Weather.Api.Modules.Forecast.Endpoints;
 
 public class GetWeatherForecast
 {
-    private readonly GetWeatherForecastRequestValidator _validator;
+    private readonly GetWeatherForecastRequestValidator _validator = new();
 
-    public GetWeatherForecast()
-    {
-        _validator = new GetWeatherForecastRequestValidator();
-    }
-    
     public async Task Map([FromServices] IWeatherForecastService weatherForecastService, HttpContext context,
         int? latitude, int? longitude, char? temperatureUnit)
     {
@@ -29,6 +24,11 @@ public class GetWeatherForecast
         
         var response = await weatherForecastService.Get(request.Latitude!.Value, request.Longitude!.Value,
             request.TemperatureUnit!.Value);
+        if (response is null)
+        {
+            await context.Response.WriteBadRequestAsync("Unexpected error during getting weather forecast");
+            return;
+        }
         
         await context.Response.WriteAsJsonAsync(response);
     }

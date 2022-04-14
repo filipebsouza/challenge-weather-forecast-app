@@ -8,18 +8,20 @@ Log.Information("Starting up");
 
 try
 {
-    Environment.SetEnvironmentVariable(ConfigurationProperties.WeatherService,
-        Environment.GetEnvironmentVariable(EnvironmentVariables.WeatherServiceHost));
+    Environment.SetEnvironmentVariable(ConfigurationProperties.WeatherForecastServiceHost,
+        Environment.GetEnvironmentVariable(EnvironmentVariables.WeatherForecastServiceHost));
 
     var builder = WebApplication.CreateBuilder(args);
 
     builder.Services.RegisterModules(typeof(Program));
+    builder.Services.AddHttpClient(ConfigurationProperties.WeatherForecastServiceHttpClientName,
+        c => c.BaseAddress = new Uri(builder.Configuration[ConfigurationProperties.WeatherForecastServiceHost]));
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 
     var app = builder.Build();
     app.MapEndpoints();
-    
+
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();

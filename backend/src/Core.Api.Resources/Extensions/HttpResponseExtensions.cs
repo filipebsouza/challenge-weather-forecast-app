@@ -19,4 +19,15 @@ public static class HttpResponseExtensions
         res.StatusCode = (int)HttpStatusCode.BadRequest;
         await res.WriteAsJsonAsync(json);
     }
+    
+    public static async Task WriteBadRequestAsync(this HttpResponse res, string? errorMessage)
+    {
+        var json = new HttpErrorResponse
+        {
+            StatusCode = (int) HttpStatusCode.BadRequest,
+            Message = errorMessage ?? "Unexpected error occur!"
+        };
+        res.StatusCode = (int)HttpStatusCode.BadRequest;
+        await res.WriteAsJsonAsync(json);
+    }
 }

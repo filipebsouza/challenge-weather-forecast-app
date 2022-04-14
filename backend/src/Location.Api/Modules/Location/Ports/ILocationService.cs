@@ -4,5 +4,5 @@ namespace Location.Api.Modules.Location.Ports;
 
 public interface ILocationService
 {
-    Task<GetAddressResponse?> Get(string address);
+    Task<GetLocationResponse?> Get(string address);
 }

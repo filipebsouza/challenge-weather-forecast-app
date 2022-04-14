@@ -10,11 +10,10 @@ public class WeatherForecastService : IWeatherForecastService
     private readonly ILogger<WeatherForecastService> _logger;
     private readonly HttpClient _httpClient;
 
-    public WeatherForecastService(ILogger<WeatherForecastService> logger, IConfiguration configuration)
+    public WeatherForecastService(ILogger<WeatherForecastService> logger, IHttpClientFactory factory)
     {
         _logger = logger;
-        _httpClient = new HttpClient();
-        _httpClient.BaseAddress = new Uri(configuration[ConfigurationProperties.WeatherService]);
+        _httpClient = factory.CreateClient(ConfigurationProperties.WeatherForecastServiceHttpClientName);
         _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("(filipe.dev, filipe.bsouza@gmail.com)");
     }
 
@@ -26,13 +25,15 @@ public class WeatherForecastService : IWeatherForecastService
         if (!response.IsSuccessStatusCode)
         {
             _logger.LogInformation("Weather forecast not found");
-            var error = await response.Content.ReadAsStringAsync();
-            _logger.LogInformation($"Error: {error}");
             return null;
         }
 
         var data = await response.ReadAsResponseDtoAsync<WeatherForecastServiceResponse>();
-        if (data is null) return null;
+        if (data is null || data.Properties is null)
+        {
+            _logger.LogInformation($"Json parse error from {nameof(WeatherForecastService)}");
+            return null;
+        }
 
         var days = data?.Properties?.Periods
             ?.Select(period => new GetWeatherForecastDayResponse
@@ -44,7 +45,11 @@ public class WeatherForecastService : IWeatherForecastService
                 Description = period.DetailedForecast
             }).ToArray();
 
-        if (days is null) return null;
+        if (days is null)
+        {
+            _logger.LogInformation("Invalid forecast!");
+            return null;
+        }
 
         return new GetWeatherForecastResponse
         {

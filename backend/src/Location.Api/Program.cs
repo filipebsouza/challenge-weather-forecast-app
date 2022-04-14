@@ -8,12 +8,14 @@ Log.Information("Starting up");
 
 try
 {
-    Environment.SetEnvironmentVariable(ConfigurationProperties.LocationService,
+    Environment.SetEnvironmentVariable(ConfigurationProperties.LocationServiceHost,
         Environment.GetEnvironmentVariable(EnvironmentVariables.LocationServiceHost));
-    
+
     var builder = WebApplication.CreateBuilder(args);
 
     builder.Services.RegisterModules(typeof(Program));
+    builder.Services.AddHttpClient(ConfigurationProperties.LocationServiceHttpClientName,
+        c => c.BaseAddress = new Uri(builder.Configuration[ConfigurationProperties.LocationServiceHost]));
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 

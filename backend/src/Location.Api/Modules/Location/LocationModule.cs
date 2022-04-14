@@ -15,7 +15,7 @@ public class LocationModule : IModule
 
     public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapGetAddress();
+        endpoints.MapGet("/location", new GetLocation().Map);
         return endpoints;
     }
 }

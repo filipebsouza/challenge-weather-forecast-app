@@ -1,11 +1,12 @@
 using System;
-using System.Net;
 using System.Net.Http;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Core.Api.Resources.Extensions;
 using Core.Api.Resources.Http.Responses;
+using Core.Api.Resources.Testing.Handlers;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
+using Weather.Api.Configuration;
 using Weather.Api.Modules.Forecast.Endpoints.Responses;
 using Weather.Api.Tests._Configuration;
 using Xunit;
@@ -14,11 +15,10 @@ namespace Weather.Api.Tests.Modules.Endpoints;
 
 public class GetWeatherForecastTests
 {
-    private readonly HttpClient _client;
+    private HttpClient _httpClient;
     private readonly string _endpoint;
     private readonly string _latitude;
     private readonly string _longitude;
-
     private readonly string _temperatureUnit;
 
     public GetWeatherForecastTests()
@@ -27,7 +27,7 @@ public class GetWeatherForecastTests
         _latitude = "latitude=70";
         _longitude = "longitude=96";
         _temperatureUnit = "temperatureUnit=C";
-        _client = MockedWebApplicationSingleton.Instance.CreateClient();
+        _httpClient = MockedWebApplicationSingleton.Instance.CreateClient();
     }
 
     [Fact]
@@ -35,7 +35,7 @@ public class GetWeatherForecastTests
     {
         const string expectedErrorMessage = "'latitude' must not be null";
 
-        var response = await _client.GetAsync($"{_endpoint}?{_longitude}&{_temperatureUnit}");
+        var response = await _httpClient.GetAsync($"{_endpoint}?{_longitude}&{_temperatureUnit}");
 
         var errorResponse = await response!.ReadAsResponseDtoAsync<HttpErrorResponse>();
         Assert.Contains(expectedErrorMessage, errorResponse!.Message!);
@@ -46,7 +46,7 @@ public class GetWeatherForecastTests
     {
         const string expectedErrorMessage = "'longitude' must not be null";
 
-        var response = await _client.GetAsync($"{_endpoint}?{_latitude}&{_temperatureUnit}");
+        var response = await _httpClient.GetAsync($"{_endpoint}?{_latitude}&{_temperatureUnit}");
 
         var errorResponse = await response!.ReadAsResponseDtoAsync<HttpErrorResponse>();
         Assert.Contains(expectedErrorMessage, errorResponse!.Message!);
@@ -57,7 +57,7 @@ public class GetWeatherForecastTests
     {
         const string expectedErrorMessage = "'temperatureUnit' must not be null";
 
-        var response = await _client.GetAsync($"{_endpoint}?{_latitude}&{_longitude}");
+        var response = await _httpClient.GetAsync($"{_endpoint}?{_latitude}&{_longitude}");
 
         var errorResponse = await response!.ReadAsResponseDtoAsync<HttpErrorResponse>();
         Assert.Contains(expectedErrorMessage, errorResponse!.Message!);
@@ -71,7 +71,7 @@ public class GetWeatherForecastTests
     {
         const string expectedErrorMessage = "'temperatureUnit' must be equals to C or F";
 
-        var response = await _client.GetAsync($"{_endpoint}?{_latitude}&{_longitude}{invalidTemperatureUnit}");
+        var response = await _httpClient.GetAsync($"{_endpoint}?{_latitude}&{_longitude}{invalidTemperatureUnit}");
 
         var errorResponse = await response!.ReadAsResponseDtoAsync<HttpErrorResponse>();
         Assert.Contains(expectedErrorMessage, errorResponse!.Message!);
@@ -80,9 +80,30 @@ public class GetWeatherForecastTests
     [Fact]
     public async Task ShouldReturnValidWeatherForecastWhenAllRequiredQueryParamsAreValid()
     {
-        var response = await _client.GetAsync($"{_endpoint}?{_latitude}&{_longitude}&{_temperatureUnit}");
+        var response = await _httpClient.GetAsync($"{_endpoint}?{_latitude}&{_longitude}&{_temperatureUnit}");
 
         var successfulResponse = await response!.ReadAsResponseDtoAsync<GetWeatherForecastResponse>();
         Assert.NotEmpty(successfulResponse!.Days);
+    }
+    
+    [Fact]
+    public async Task ShouldReturnErrorWhenLocationServiceResponseIsInvalid()
+    {
+        const string expectedErrorMessage = "Unexpected error during getting weather forecast";
+        _httpClient = MockedWebApplicationSingleton.Instance.WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureTestServices(services =>
+            {
+                services.AddTransient<InvalidJsonResponseHandler>();
+                services.AddHttpClient(ConfigurationProperties.WeatherForecastServiceHttpClientName,
+                        c => c.BaseAddress = new Uri(MockedWebApplication.WeatherForecastServiceHost))
+                    .AddHttpMessageHandler<InvalidJsonResponseHandler>();
+            });
+        }).CreateClient();
+
+        var response = await _httpClient.GetAsync($"{_endpoint}?{_latitude}&{_longitude}&{_temperatureUnit}");
+
+        var errorResponse = await response!.ReadAsResponseDtoAsync<HttpErrorResponse>();
+        Assert.Equal(expectedErrorMessage, errorResponse!.Message);
     }
 }
