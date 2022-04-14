@@ -3,7 +3,7 @@ using Weather.Api.Configuration;
 using Weather.Api.Modules.Forecast.Endpoints.Responses;
 using Weather.Api.Modules.Forecast.Ports;
 
-namespace Weather.Api.Modules.Location.Adapters;
+namespace Weather.Api.Modules.Forecast.Adapters;
 
 public class WeatherForecastService : IWeatherForecastService
 {
@@ -35,11 +35,20 @@ public class WeatherForecastService : IWeatherForecastService
         if (data is null) return null;
 
         var days = data?.Properties?.Periods
-            ?.Select(period => new GetWeatherForecastDayResponse(period.StartTime, period.TemperatureUnit!,
-                period.Temperature, period.ShortForecast!, period.DetailedForecast)).ToArray();
+            ?.Select(period => new GetWeatherForecastDayResponse
+            {
+                Date = period.StartTime,
+                TemperatureUnit = period.TemperatureUnit!,
+                Temperature = period.Temperature,
+                ShortDescription = period.ShortForecast!,
+                Description = period.DetailedForecast
+            }).ToArray();
 
         if (days is null) return null;
 
-        return new GetWeatherForecastResponse(days);
+        return new GetWeatherForecastResponse
+        {
+            Days = days
+        };
     }
 }

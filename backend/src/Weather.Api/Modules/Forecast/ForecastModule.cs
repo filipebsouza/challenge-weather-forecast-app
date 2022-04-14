@@ -1,7 +1,7 @@
 using Core.Api.Resources.Modules;
+using Weather.Api.Modules.Forecast.Adapters;
 using Weather.Api.Modules.Forecast.Endpoints;
 using Weather.Api.Modules.Forecast.Ports;
-using Weather.Api.Modules.Location.Adapters;
 
 namespace Weather.Api.Modules.Forecast;
 

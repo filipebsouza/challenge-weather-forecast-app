@@ -17,7 +17,7 @@ public class GetWeatherForecastRequestValidator : AbstractValidator<GetWeatherFo
         RuleFor(req => req.TemperatureUnit)
             .NotNull()
             .WithMessage("'temperatureUnit' must not be null")
-            .Must(temperatureUnit => temperatureUnit != 'C' && temperatureUnit != 'F')
+            .Must(temperatureUnit => temperatureUnit == 'C' || temperatureUnit == 'F')
             .WithMessage("'temperatureUnit' must be equals to C or F");
     }
 }

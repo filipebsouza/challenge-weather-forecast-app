@@ -10,7 +10,7 @@ public static class HttpResponseExtensions
     public static async Task WriteValidationErrorsAsync(this HttpResponse res, List<ValidationFailure> validationFailures)
     {
         var errorMessage = string.Empty;
-        validationFailures.ForEach(failure => errorMessage += $"Error: {failure.ErrorMessage}");
+        validationFailures.ForEach(failure => errorMessage += $"Error: {failure.ErrorMessage}. ");
         var json = new HttpErrorResponse
         {
             StatusCode = (int) HttpStatusCode.BadRequest,
