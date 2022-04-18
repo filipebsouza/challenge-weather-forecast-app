@@ -1,0 +1,33 @@
+version: "3.9"
+services:
+
+  frontend-app:
+    build: frontend/.
+    expose:
+      4142
+    ports:
+      - "4242:4142"
+    networks:
+      - services_network
+  
+  location-api:
+    build: backend/src/Location.Api/.
+    expose:
+      5001
+    ports:
+      - "5001:5001"
+    networks:
+      - services_network
+
+  weather-forecast-api:
+    build: backend/src/Weather.Forecast.Api/.
+    expose:
+      5002
+    ports:
+      - "5002:5002"
+    networks:
+      - services_network
+
+networks:
+  internal_network:
+    driver: bridge
