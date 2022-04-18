@@ -27,6 +27,7 @@
 
 ## Future implementations:
 
+- Implement fault tolerance in Frontend (eg if any Backend service goes down, what should be done?).
 - Creating unit tests in the Frontend app. This is important in the service layer because this moment doesn't have complex UI behavior to validate.
 - Improve Frontend UI to create a better user experience.
 - To create a resiliency mechanism to avoid requesting something for down services (for instance: Circuit Breaker).
@@ -38,7 +39,7 @@
 
 ## How to start the App:
 
-- In the app root directory run this command:
+- In the app root directory, run this command:
 
 ````batch
 docker-compose up
