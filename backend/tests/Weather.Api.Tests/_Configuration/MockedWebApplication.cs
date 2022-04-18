@@ -8,7 +8,7 @@ namespace Weather.Api.Tests._Configuration;
 
 public class MockedWebApplication : WebApplicationFactory<Program>
 {
-    public const string WeatherForecastServiceHost = "https://api.weather.gov/gridpoints/LWX/";
+    public const string WeatherForecastServiceHost = "https://api.weather.gov/";
     
     protected override IHost CreateHost(IHostBuilder builder)
     {

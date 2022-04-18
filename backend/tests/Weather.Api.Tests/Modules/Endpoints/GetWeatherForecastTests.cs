@@ -24,8 +24,8 @@ public class GetWeatherForecastTests
     public GetWeatherForecastTests()
     {
         _endpoint = "/forecast";
-        _latitude = "latitude=70";
-        _longitude = "longitude=96";
+        _latitude = "latitude=39.7456";
+        _longitude = "longitude=-97.0892";
         _temperatureUnit = "temperatureUnit=C";
         _httpClient = MockedWebApplicationSingleton.Instance.CreateClient();
     }

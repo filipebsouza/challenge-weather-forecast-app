@@ -17,25 +17,40 @@ public class WeatherForecastService : IWeatherForecastService
         _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("(filipe.dev, filipe.bsouza@gmail.com)");
     }
 
-    public async Task<GetWeatherForecastResponse?> Get(int latitude, int longitude, char temperatureUnit)
+    public async Task<GetWeatherForecastResponse?> Get(double latitude, double longitude, char temperatureUnit)
     {
-        var response =
+        var weatherPreciseLocationResponse = await _httpClient.GetAsync($"points/{latitude},{longitude}");
+        if (!weatherPreciseLocationResponse.IsSuccessStatusCode)
+        {
+            _logger.LogInformation("Weather precise location not found");
+            return null;
+        }
+
+        var preciseLocationData =
+            await weatherPreciseLocationResponse.ReadAsResponseDtoAsync<WeatherPreciseLocationResponse>();
+        if (preciseLocationData is null || preciseLocationData?.Properties?.Forecast is null)
+        {
+            _logger.LogInformation($"Json parse error to {nameof(WeatherPreciseLocationResponse)}");
+            return null;
+        }
+
+        var weatherResponse =
             await _httpClient.GetAsync(
-                $"{longitude},{latitude}/forecast?units={(temperatureUnit == 'C' ? "si" : "us")}");
-        if (!response.IsSuccessStatusCode)
+                $"{preciseLocationData.Properties!.Forecast!}?units={(temperatureUnit == 'C' ? "si" : "us")}");
+        if (!weatherResponse.IsSuccessStatusCode)
         {
             _logger.LogInformation("Weather forecast not found");
             return null;
         }
 
-        var data = await response.ReadAsResponseDtoAsync<WeatherForecastServiceResponse>();
-        if (data is null || data.Properties is null)
+        var forecastData = await weatherResponse.ReadAsResponseDtoAsync<WeatherForecastServiceResponse>();
+        if (forecastData is null || forecastData.Properties is null)
         {
-            _logger.LogInformation($"Json parse error from {nameof(WeatherForecastService)}");
+            _logger.LogInformation($"Json parse error to {nameof(WeatherForecastServiceResponse)}");
             return null;
         }
 
-        var days = data?.Properties?.Periods
+        var days = forecastData?.Properties?.Periods
             ?.Select(period => new GetWeatherForecastDayResponse
             {
                 Date = period.StartTime,

@@ -4,6 +4,5 @@ namespace Weather.Api.Modules.Forecast.Ports;
 
 public interface IWeatherForecastService
 {
-    Task<GetWeatherForecastResponse?> Get(int latitude, int longitude, char temperatureUnit);
-    
+    Task<GetWeatherForecastResponse?> Get(double latitude, double longitude, char temperatureUnit);
 }

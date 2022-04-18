@@ -10,7 +10,7 @@ public class GetWeatherForecast
     private readonly GetWeatherForecastRequestValidator _validator = new();
 
     public async Task Map([FromServices] IWeatherForecastService weatherForecastService, HttpContext context,
-        int? latitude, int? longitude, char? temperatureUnit)
+        double? latitude, double? longitude, char? temperatureUnit)
     {
         var request = new GetWeatherForecastRequest
             {Latitude = latitude, Longitude = longitude, TemperatureUnit = temperatureUnit};
