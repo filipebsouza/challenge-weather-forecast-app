@@ -9,7 +9,7 @@ import {AddressContainerComponent} from "./address-container/address-container.c
 import {WeatherForecastListComponent} from "./weather-forecast-list/weather-forecast-list.component";
 import {WeatherForecastItemComponent} from "./weather-forecast-item/weather-forecast-item.component";
 import {BrowserLocationComponent} from "./browser-location/browser-location.component";
-import {WeatherForecastPageComponent} from "../pages/weather-page/weather-forecast-page.component";
+import {WeatherForecastPageComponent} from "../pages/weather-forecast-page/weather-forecast-page.component";
 import {LocationContainerComponent} from "./location-container/location-container.component";
 import {FormsModule} from "@angular/forms";
 

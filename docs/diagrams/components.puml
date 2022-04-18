@@ -1,0 +1,47 @@
+@startuml
+interface "HTTP" as HttpWeather
+interface "HTTP" as HttpLocation
+
+package Weather #lightblue {
+  HttpWeather -down- [Weather Web API]
+}
+
+package Location #lightblue {
+  HttpLocation -down- [Location Web API]
+}
+
+package WeatherApp #lightgreen {
+  [app]
+  package Pages {   
+    [weather-forecast-page]
+  }
+  package Components {   
+    [address-bar]
+    [address-container] <- [address-bar]
+    [address-list]
+    [address-container] <-down- [address-list]
+    [browser-location]
+    [location-container] <-down- [address-container]
+    [location-container] <- [browser-location]
+    [weather-forecast-container] <-down- [weather-forecast-temperature-unit]  
+    [weather-forecast-container] <-down- [weather-forecast-list]
+    [weather-forecast-list] <-down- [weather-forecast-item]    
+  }
+  Components <-- Pages
+  Pages <-- app
+}
+
+WeatherApp ..> HttpLocation : use
+WeatherApp ..> HttpWeather : use
+
+component [api.weather.gov] #Yellow
+component [geocoding.geo.census.gov] #Yellow
+
+[Weather Web API] ..> [api.weather.gov] : use
+[Location Web API] ..> [geocoding.geo.census.gov] : use
+
+note right of WeatherApp
+  Angular SPA to search addresses and find
+  weather forecasts for the next seven days.
+end note
+@enduml
