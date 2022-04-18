@@ -35,3 +35,15 @@
 ## Component diagram:
 
 ![Components](/docs/images/01%20-%20components.png)
+
+## How to start the App:
+
+- In the app root directory run this command:
+
+````batch
+docker-compose up
+````
+
+## Addresses for test:
+
+[Valid US addresses](https://gist.github.com/HeroicEric/1102788)
