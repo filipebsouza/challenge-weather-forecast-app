@@ -13,6 +13,7 @@ import {LocationPublisherService} from "../../services/events/location-publisher
 })
 export class AddressListComponent implements OnInit, OnDestroy {
   addresses?: ApiLocationAddressResponseModel[];
+  message = 'No address found!';
   observer = new Subscription();
 
   constructor(private addressPublisherService: AddressPublisherService, private locationPublisherService: LocationPublisherService) {
@@ -20,7 +21,11 @@ export class AddressListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.observer = this.addressPublisherService.emitter.subscribe(response => {
-      this.addresses = response.addresses;
+      if (response && !response.errorMessage) {
+        this.addresses = response.addresses;
+      } else {
+        this.message = response.errorMessage!;
+      }
     });
   }
 

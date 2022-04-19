@@ -20,13 +20,20 @@ export class AddressBarComponent implements OnInit {
 
   }
 
-  search() {
+  search(): void {
     if (this.address) {
-      //this.apiService.get<ApiLocationResponseModel>(`${this.locationApiHost}?address=${this.address}`)
-      this.apiService.getTeste2(`${this.locationApiHost}?address=${this.address}`)
-        .subscribe(location => {
-          this.response = location;
-          this.addressPublisherService.create(this.response);
+      this.apiService.get<ApiLocationResponseModel>(`${this.locationApiHost}/location?address=${this.address}`)
+        .subscribe({
+          next: (location => {
+            this.response = location;
+            this.response.errorMessage = undefined;
+            this.addressPublisherService.create(this.response);
+          }),
+          error: (() => {
+            let error = new ApiLocationResponseModel();
+            error.errorMessage = `Address "${this.address}" not found!`;
+            this.addressPublisherService.create(error);
+          })
         });
     }
   }

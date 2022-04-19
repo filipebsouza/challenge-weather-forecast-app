@@ -40,16 +40,9 @@ export class BrowserLocationComponent implements OnInit {
   getAddress() {
     if (!this.location?.isValid()) {
       console.log('Location invalid');
+      return;
     }
 
-    this.apiService
-      .getTeste(`${this.locationApiHost}/location/address?latitude=${this.location!.latitude}&longitude=${this.location!.longitude}`)
-      //.get<string>(`${this.locationApiHost}/location/address?latitude=${this.location!.latitude}&longitude=${this.location!.longitude}`)
-      .subscribe(address => {
-        //console.log(address);
-        //console.log(this.location);
-        this.location!.setCompleteAddress(address);
-        this.locationPublisherService.create(this.location!);
-      });
+    this.locationPublisherService.create(this.location!);
   }
 }

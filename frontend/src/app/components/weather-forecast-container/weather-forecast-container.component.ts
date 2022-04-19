@@ -27,10 +27,14 @@ export class WeatherForecastContainerComponent implements OnInit, OnDestroy {
       this.location = location;
       const {latitude, longitude} = this.location;
       this.apiService
-        //.get<ApiWeatherForecastResponseModel>(`${this.weatherApiHost}?latitude=${latitude}&longitude=${longitude}&unit=${this.temperatureUnit}`)
-        .getTeste3(`${this.weatherApiHost}?latitude=${latitude}&longitude=${longitude}&unit=${this.temperatureUnit}`)
-        .subscribe(response => {
-          this.weatherPublisherService.create(response);
+        .get<ApiWeatherForecastResponseModel>(`${this.weatherApiHost}/forecast?latitude=${latitude}&longitude=${longitude}&temperatureUnit=${this.temperatureUnit}`)
+        .subscribe({
+          next: response => this.weatherPublisherService.create(response),
+          error: (() => {
+            let error = new ApiWeatherForecastResponseModel();
+            error.errorMessage = `Weather forecast for latitude "${latitude}" and longitude ${longitude} not found!`;
+            this.weatherPublisherService.create(error);
+          })
         });
     })
   }

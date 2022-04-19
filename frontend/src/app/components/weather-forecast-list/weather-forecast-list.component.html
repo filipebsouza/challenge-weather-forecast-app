@@ -1,9 +1,6 @@
 <div *ngIf="!weatherForecast || !weatherForecast.days; else elseBlock">
-  <p>No weather forecast found!</p>
+  <p>{{ message }}</p>
 </div>
 <ng-template #elseBlock>
-  <ul>
-    <li *ngFor="let day of weatherForecast!.days">{{ day.temperature }}
-    </li>
-  </ul>
+  <app-weather-forecast-item *ngFor="let day of weatherForecast!.days" [item]="day"></app-weather-forecast-item>
 </ng-template>

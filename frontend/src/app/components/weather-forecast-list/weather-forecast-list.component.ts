@@ -11,13 +11,18 @@ import {Subscription} from "rxjs";
   styleUrls: ['./weather-forecast-list.component.css']
 })
 export class WeatherForecastListComponent implements OnInit, OnDestroy {
+  message = 'No weather forecast found!';
   weatherForecast?: ApiWeatherForecastResponseModel;
   observer: Subscription = new Subscription();
   constructor(private weatherPublisherService: WeatherPublisherService) { }
 
   ngOnInit(): void {
-    this.observer = this.weatherPublisherService.emitter.subscribe(weatherForecast => {
-      this.weatherForecast = weatherForecast;
+    this.observer = this.weatherPublisherService.emitter.subscribe(response => {
+      if (response && !response.errorMessage) {
+        this.weatherForecast = response;
+      } else {
+        this.message = response.errorMessage!;
+      }
     })
   }
 

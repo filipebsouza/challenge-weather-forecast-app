@@ -1,1 +1,7 @@
-<p>weather-forecast-item works!</p>
+<ul *ngIf="item">
+  <li>{{ item.date }}</li>
+  <li>{{ item.image }}</li>
+  <li>{{ item.temperature }}{{item.temperatureUnit}}</li>
+  <li>{{ item.shortDescription }}</li>
+  <li>{{ item.description }}</li>
+</ul>

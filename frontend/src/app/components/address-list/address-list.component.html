@@ -1,5 +1,5 @@
 <div *ngIf="!addresses; else elseBlock">
-  <p>No address found!</p>
+  <p>{{ message }}</p>
 </div>
 <ng-template #elseBlock>
   <ul>

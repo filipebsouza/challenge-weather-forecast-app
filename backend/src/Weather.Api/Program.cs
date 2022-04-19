@@ -18,9 +18,12 @@ try
         c => c.BaseAddress = new Uri(builder.Configuration[ConfigurationProperties.WeatherForecastServiceHost]));
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+    builder.Services.AddCors();
 
     var app = builder.Build();
     app.MapEndpoints();
+    app.UseCors(x => x.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin => true)
+        .AllowCredentials());
 
     if (app.Environment.IsDevelopment())
     {
