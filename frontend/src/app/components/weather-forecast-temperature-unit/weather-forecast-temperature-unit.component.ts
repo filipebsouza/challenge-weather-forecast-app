@@ -17,6 +17,6 @@ export class WeatherForecastTemperatureUnitComponent implements OnInit {
 
   changeTemperatureUnit($event: any) {
     this.temperatureUnit = $event;
-    this.selectTemperatureUnit.next(this.temperatureUnit);
+    this.selectTemperatureUnit.emit(this.temperatureUnit);
   }
 }

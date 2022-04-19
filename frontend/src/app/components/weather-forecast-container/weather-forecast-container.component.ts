@@ -25,22 +25,26 @@ export class WeatherForecastContainerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.observer = this.locationPublisherService.emitter.subscribe(location => {
       this.location = location;
-      const {latitude, longitude} = this.location;
-      this.apiService
-        .get<ApiWeatherForecastResponseModel>(`${this.weatherApiHost}/forecast?latitude=${latitude}&longitude=${longitude}&temperatureUnit=${this.temperatureUnit}`)
-        .subscribe({
-          next: response => this.weatherPublisherService.create(response),
-          error: (() => {
-            let error = new ApiWeatherForecastResponseModel();
-            error.errorMessage = `Weather forecast for latitude "${latitude}" and longitude ${longitude} not found!`;
-            this.weatherPublisherService.create(error);
-          })
-        });
+      this.getWeatherForecast();
     })
   }
 
   selectTemperatureUnit(temperatureUnit: string): void {
     this.temperatureUnit = temperatureUnit;
+    this.getWeatherForecast();
+  }
+
+  getWeatherForecast(): void {
+    this.apiService
+      .get<ApiWeatherForecastResponseModel>(`${this.weatherApiHost}/forecast?latitude=${this.location.latitude}&longitude=${this.location.longitude}&temperatureUnit=${this.temperatureUnit}`)
+      .subscribe({
+        next: response => this.weatherPublisherService.create(response),
+        error: (() => {
+          let error = new ApiWeatherForecastResponseModel();
+          error.errorMessage = `Weather forecast for latitude "${this.location.latitude}" and longitude ${this.location.longitude} not found!`;
+          this.weatherPublisherService.create(error);
+        })
+      });
   }
 
   ngOnDestroy(): void {
