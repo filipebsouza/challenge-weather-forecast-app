@@ -8,23 +8,27 @@ services:
     networks:
       - services_network
   
-  # location-api:
-  #   build: backend/src/Location.Api/.
-  #   expose:
-  #     5001
-  #   ports:
-  #     - "5001:5001"
-  #   networks:
-  #     - services_network
+  location-api:
+    build: 
+      context: backend/.
+      dockerfile: Dockerfile.location
+    expose:
+      - 5001
+    ports:
+      - "5001:5001"
+    networks:
+      - services_network
 
-  # weather-forecast-api:
-  #   build: backend/src/Weather.Forecast.Api/.
-  #   expose:
-  #     5002
-  #   ports:
-  #     - "5002:5002"
-  #   networks:
-  #     - services_network
+  weather-api:
+    build:
+      context: backend/.
+      dockerfile: Dockerfile.weather
+    expose:
+      - 5002
+    ports:
+      - "5002:5002"
+    networks:
+      - services_network
 
 networks:
   services_network:

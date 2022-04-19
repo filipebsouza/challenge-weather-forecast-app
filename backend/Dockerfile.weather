@@ -1,0 +1,26 @@
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /app
+EXPOSE 5001
+
+WORKDIR /out
+COPY ./ ./
+
+RUN dotnet restore
+COPY . .
+
+WORKDIR "/out/src/Core.Api.Resources"
+RUN dotnet build -c Release -o /app/build
+
+WORKDIR "/out/src/Weather.Api"
+RUN dotnet build -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish -c Release -o /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENV ASPNETCORE_URLS http://*:5002
+
+ENTRYPOINT ["dotnet", "Weather.Api.dll"]
