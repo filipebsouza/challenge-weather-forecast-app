@@ -2,5 +2,7 @@
   <p>{{ message }}</p>
 </div>
 <ng-template #elseBlock>
-  <app-weather-forecast-item *ngFor="let day of weatherForecast!.days" [item]="day"></app-weather-forecast-item>
+  <div class="row">
+    <app-weather-forecast-item *ngFor="let day of weatherForecast!.days" [item]="day"></app-weather-forecast-item>
+  </div>
 </ng-template>
