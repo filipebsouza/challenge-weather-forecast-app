@@ -20,4 +20,6 @@ public class GetWeatherForecastDayResponse
     public string ShortDescription { get; set; } = null!;
     [JsonPropertyName("description")]
     public string? Description { get; set; }
+    [JsonPropertyName("image")]
+    public string? Image { get; set; }
 }

@@ -57,6 +57,7 @@ public class WeatherForecastService : IWeatherForecastService
                 TemperatureUnit = period.TemperatureUnit!,
                 Temperature = period.Temperature,
                 ShortDescription = period.ShortForecast!,
+                Image = period.Icon,
                 Description = period.DetailedForecast
             }).ToArray();
 
