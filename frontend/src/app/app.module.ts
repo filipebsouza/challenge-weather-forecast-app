@@ -20,7 +20,7 @@ import {LOCATION_SERVICE_HOST, WEATHER_SERVICE_HOST} from "./services/_configs/p
     {provide: LOCATION_SERVICE_HOST, useValue: environment.locationServiceHost},
     {provide: WEATHER_SERVICE_HOST, useValue: environment.weatherServiceHost},
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {
 }

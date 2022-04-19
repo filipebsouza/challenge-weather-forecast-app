@@ -12,6 +12,8 @@ import {BrowserLocationComponent} from "./browser-location/browser-location.comp
 import {WeatherForecastPageComponent} from "../pages/weather-forecast-page/weather-forecast-page.component";
 import {LocationContainerComponent} from "./location-container/location-container.component";
 import {FormsModule} from "@angular/forms";
+import {AppModule} from "../app.module";
+import {PipesModule} from "../pipes/pipes.module";
 
 const components = [
   AppComponent,
@@ -31,7 +33,8 @@ const components = [
   declarations: [components],
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    PipesModule
   ],
   exports: [
     components

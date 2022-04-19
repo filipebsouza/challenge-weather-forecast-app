@@ -1,7 +1,7 @@
 <ul *ngIf="item">
   <li>{{ item.date | date:"yyyy/MM/dd HH:mm"}}</li>
   <li *ngIf="item.image"><img [src]="item.image"/></li>
-  <li>{{ item.temperature }}{{item.temperatureUnit}}</li>
+  <li>{{ item.temperature | temperature: item.temperatureUnit }}</li>
   <li>{{ item.shortDescription }}</li>
   <li *ngIf="item.description">{{ item.description }}</li>
 </ul>
