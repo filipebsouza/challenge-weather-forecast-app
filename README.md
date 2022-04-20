@@ -12,6 +12,7 @@
 - The components are divided into Frontend app, Backend Location Web API, and Backend Weather Web API.
 - The components are running in Docker containers.
 - Integration tests were made for validating communication between third-party services.
+- **Observer pattern** was used for communication between Angular services and components.
 
 ## Benefits:
 
@@ -37,6 +38,13 @@
 
 ![Components](/docs/images/01%20-%20components.png)
 
+## Techstack:
+
+- Frontend: Angular 13.
+- Backend: C# and ASP.NET 6 with minimal APIs.
+- CI: GitHub actions.
+- Containers: Docker and Docker compose.
+
 ## How to start the App:
 
 - In the app root directory, run this command:
@@ -44,6 +52,8 @@
 ````batch
 docker-compose up
 ````
+
+- Put on the browser address http://localhost:8080
 
 ## Addresses for test:
 
