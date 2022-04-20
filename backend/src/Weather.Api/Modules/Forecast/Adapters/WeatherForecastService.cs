@@ -19,6 +19,64 @@ public class WeatherForecastService : IWeatherForecastService
 
     public async Task<GetWeatherForecastResponse?> Get(double latitude, double longitude, char temperatureUnit)
     {
+        var preciseLocationData = await GetPreciseLocation(latitude, longitude);
+        if (preciseLocationData is null) return null;
+
+        var forecastData = await GetWeatherForecast(preciseLocationData.Properties!.Forecast!, temperatureUnit);
+        if (forecastData is null) return null;
+
+        return ConvertToResponse(forecastData);
+    }
+
+    private GetWeatherForecastResponse? ConvertToResponse(WeatherForecastServiceResponse? forecastData)
+    {
+        var periods = forecastData?.Properties?.Periods;
+        if (periods is null) return null;
+
+        var days = periods.Select(period => new GetWeatherForecastDayResponse
+            {
+                Date = period.StartTime,
+                TemperatureUnit = period.TemperatureUnit!,
+                Temperature = period.Temperature,
+                ShortDescription = period.ShortForecast!,
+                Image = period.Icon,
+                Description = period.DetailedForecast,
+                IsDayTime = period.IsDaytime
+            }).ToArray();
+        if (days.Length == 0)
+        {
+            _logger.LogInformation("Invalid forecast!");
+            return null;
+        }
+        
+        return new GetWeatherForecastResponse
+        {
+            Days = days
+        };
+    }
+
+    private async Task<WeatherForecastServiceResponse?> GetWeatherForecast(string resourceUri, char temperatureUnit)
+    {
+        var weatherResponse = await _httpClient.GetAsync(
+            $"{resourceUri}?units={(temperatureUnit == 'C' ? "si" : "us")}");
+        if (!weatherResponse.IsSuccessStatusCode)
+        {
+            _logger.LogInformation("Weather forecast not found");
+            return null;
+        }
+
+        var forecastData = await weatherResponse.ReadAsResponseDtoAsync<WeatherForecastServiceResponse>();
+        if (forecastData is null || forecastData.Properties is null)
+        {
+            _logger.LogInformation($"Json parse error to {nameof(WeatherForecastServiceResponse)}");
+            return null;
+        }
+
+        return forecastData;
+    }
+
+    private async Task<WeatherPreciseLocationResponse?> GetPreciseLocation(double latitude, double longitude)
+    {
         var weatherPreciseLocationResponse = await _httpClient.GetAsync($"points/{latitude},{longitude}");
         if (!weatherPreciseLocationResponse.IsSuccessStatusCode)
         {
@@ -34,42 +92,6 @@ public class WeatherForecastService : IWeatherForecastService
             return null;
         }
 
-        var weatherResponse =
-            await _httpClient.GetAsync(
-                $"{preciseLocationData.Properties!.Forecast!}?units={(temperatureUnit == 'C' ? "si" : "us")}");
-        if (!weatherResponse.IsSuccessStatusCode)
-        {
-            _logger.LogInformation("Weather forecast not found");
-            return null;
-        }
-
-        var forecastData = await weatherResponse.ReadAsResponseDtoAsync<WeatherForecastServiceResponse>();
-        if (forecastData is null || forecastData.Properties is null)
-        {
-            _logger.LogInformation($"Json parse error to {nameof(WeatherForecastServiceResponse)}");
-            return null;
-        }
-
-        var days = forecastData?.Properties?.Periods
-            ?.Select(period => new GetWeatherForecastDayResponse
-            {
-                Date = period.StartTime,
-                TemperatureUnit = period.TemperatureUnit!,
-                Temperature = period.Temperature,
-                ShortDescription = period.ShortForecast!,
-                Image = period.Icon,
-                Description = period.DetailedForecast
-            }).ToArray();
-
-        if (days is null)
-        {
-            _logger.LogInformation("Invalid forecast!");
-            return null;
-        }
-
-        return new GetWeatherForecastResponse
-        {
-            Days = days
-        };
+        return preciseLocationData;
     }
 }

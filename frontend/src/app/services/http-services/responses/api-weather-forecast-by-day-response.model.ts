@@ -5,4 +5,5 @@ export class ApiWeatherForecastByDayResponseModel {
   image!: string;
   shortDescription!: string;
   description?: string;
+  isDayTime: boolean = false;
 }

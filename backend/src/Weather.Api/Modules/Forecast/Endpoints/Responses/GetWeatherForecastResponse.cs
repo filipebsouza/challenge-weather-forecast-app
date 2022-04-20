@@ -22,4 +22,6 @@ public class GetWeatherForecastDayResponse
     public string? Description { get; set; }
     [JsonPropertyName("image")]
     public string? Image { get; set; }
+    [JsonPropertyName("isDayTime")]
+    public bool IsDayTime { get; set; }
 }
