@@ -22,6 +22,7 @@ export class WeatherForecastListComponent implements OnInit, OnDestroy {
         this.weatherForecast = response;
       } else {
         this.message = response.errorMessage!;
+        this.weatherForecast = undefined;
       }
     })
   }

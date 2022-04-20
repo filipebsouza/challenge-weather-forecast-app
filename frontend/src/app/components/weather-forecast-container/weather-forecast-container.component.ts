@@ -10,8 +10,7 @@ import {WeatherPublisherService} from "../../services/events/weather-publisher/w
 
 @Component({
   selector: 'app-weather-forecast-container',
-  templateUrl: './weather-forecast-container.component.html',
-  styleUrls: ['./weather-forecast-container.component.css']
+  templateUrl: './weather-forecast-container.component.html'
 })
 export class WeatherForecastContainerComponent implements OnInit, OnDestroy {
   location!: LocationModel
@@ -24,8 +23,14 @@ export class WeatherForecastContainerComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.observer = this.locationPublisherService.emitter.subscribe(location => {
-      this.location = location;
-      this.getWeatherForecast();
+      if (location && location.errorMessage) {
+        let error = new ApiWeatherForecastResponseModel();
+        error.errorMessage = location.errorMessage;
+        this.weatherPublisherService.create(error);
+      } else {
+        this.location = location;
+        this.getWeatherForecast();
+      }
     })
   }
 

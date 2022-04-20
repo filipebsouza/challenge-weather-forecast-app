@@ -1,23 +1,18 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {GenericApiService} from "../../services/http-services/generic-api.service";
 import {ApiLocationResponseModel} from "../../services/http-services/responses/api-location-response.model";
 import {AddressPublisherService} from "../../services/events/address-publisher/address-publisher.service";
 
 @Component({
   selector: 'app-address-bar',
-  templateUrl: './address-bar.component.html',
-  styleUrls: ['./address-bar.component.css']
+  templateUrl: './address-bar.component.html'
 })
-export class AddressBarComponent implements OnInit {
+export class AddressBarComponent {
   address: string = '';
   response?: ApiLocationResponseModel;
 
   constructor(@Inject('LOCATION_SERVICE_HOST') private locationApiHost: string,
               private apiService: GenericApiService, private addressPublisherService: AddressPublisherService) {
-  }
-
-  ngOnInit(): void {
-
   }
 
   search(): void {
@@ -26,7 +21,11 @@ export class AddressBarComponent implements OnInit {
         .subscribe({
           next: (location => {
             this.response = location;
-            this.response.errorMessage = undefined;
+            if (!this.response?.addresses?.length) {
+              this.response.errorMessage = `Address "${this.address}" not found!`;
+            } else {
+              this.response.errorMessage = undefined;
+            }
             this.addressPublisherService.create(this.response);
           }),
           error: (() => {

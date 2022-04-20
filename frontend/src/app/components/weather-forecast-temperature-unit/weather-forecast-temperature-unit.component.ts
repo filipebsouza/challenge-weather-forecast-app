@@ -1,19 +1,12 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 
 @Component({
   selector: 'app-weather-forecast-temperature-unit',
-  templateUrl: './weather-forecast-temperature-unit.component.html',
-  styleUrls: ['./weather-forecast-temperature-unit.component.css']
+  templateUrl: './weather-forecast-temperature-unit.component.html'
 })
-export class WeatherForecastTemperatureUnitComponent implements OnInit {
+export class WeatherForecastTemperatureUnitComponent {
   temperatureUnit: string = 'C';
   @Output() selectTemperatureUnit = new EventEmitter<string>();
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
 
   changeTemperatureUnit($event: any) {
     this.temperatureUnit = $event;

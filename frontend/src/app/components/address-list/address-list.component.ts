@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {
   ApiLocationAddressResponseModel
 } from "../../services/http-services/responses/api-location-address-response.model";
@@ -8,8 +8,7 @@ import {LocationPublisherService} from "../../services/events/location-publisher
 
 @Component({
   selector: 'app-address-list',
-  templateUrl: './address-list.component.html',
-  styleUrls: ['./address-list.component.css']
+  templateUrl: './address-list.component.html'
 })
 export class AddressListComponent implements OnInit, OnDestroy {
   addresses?: ApiLocationAddressResponseModel[];
@@ -25,6 +24,10 @@ export class AddressListComponent implements OnInit, OnDestroy {
         this.addresses = response.addresses;
       } else {
         this.message = response.errorMessage!;
+        this.addresses = undefined;
+        let error = new ApiLocationAddressResponseModel();
+        error.errorMessage = 'No weather forecast found!';
+        this.locationPublisherService.create(error);
       }
     });
   }

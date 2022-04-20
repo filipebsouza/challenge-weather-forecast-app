@@ -12,14 +12,11 @@ export class LocationService {
     return new Observable<BrowserLocationModel>(observable => {
       navigator.geolocation?.getCurrentPosition(
         success => {
-          console.log(success.coords);
           let location = new BrowserLocationModel(success.coords.latitude, success.coords.longitude);
-          console.log(location);
           observable.next(location);
           observable.complete();
         },
         error => {
-          console.log(error)
           let locationStateError = BrowserLocationState.UnexpectedError;
           if (error.PERMISSION_DENIED) {
             locationStateError = BrowserLocationState.PermissionDenied;

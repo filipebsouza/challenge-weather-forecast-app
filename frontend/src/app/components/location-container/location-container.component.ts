@@ -2,8 +2,7 @@ import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-location-container',
-  templateUrl: './location-container.component.html',
-  styleUrls: ['./location-container.component.css']
+  templateUrl: './location-container.component.html'
 })
 export class LocationContainerComponent {
   locationType: string = 'address';

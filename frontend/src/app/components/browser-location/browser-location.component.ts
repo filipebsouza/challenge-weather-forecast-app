@@ -7,8 +7,7 @@ import {LocationPublisherService} from "../../services/events/location-publisher
 
 @Component({
   selector: 'app-browser-location',
-  templateUrl: './browser-location.component.html',
-  styleUrls: ['./browser-location.component.css']
+  templateUrl: './browser-location.component.html'
 })
 export class BrowserLocationComponent implements OnInit {
   location?: BrowserLocationModel;
@@ -26,20 +25,17 @@ export class BrowserLocationComponent implements OnInit {
       this.locationService.getLocation()
         .subscribe(location => {
           this.location = location;
-          console.log("getLocation", location);
           this.getAddress();
         });
 
       return;
     }
 
-    console.log("already exists", this.location);
     this.getAddress();
   }
 
   getAddress() {
     if (!this.location?.isValid()) {
-      console.log('Location invalid');
       return;
     }
 

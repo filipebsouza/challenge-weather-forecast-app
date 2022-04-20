@@ -4,6 +4,7 @@ export class ApiLocationAddressResponseModel implements LocationModel {
   latitude!: number;
   longitude!: number;
   completeAddress!: string;
+  errorMessage?: string;
 
   getLatitude(): number | undefined {
     return this.latitude;
