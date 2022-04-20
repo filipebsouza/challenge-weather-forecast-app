@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  locationServiceHost: '',
-  weatherServiceHost: ''
+  locationServiceHost: 'http://localhost:5001',
+  weatherServiceHost: 'http://localhost:5002'
 };
